@@ -306,7 +306,7 @@ var fullScreenEnabled = !!(document.fullscreenEnabled || document.mozFullScreenE
     /*  The creation of each list item and button is done by the createMenuItem() function, which is defined as
         follows: */
 
-        var captionMenuButtons = [];
+        var subtitleMenuButtons = [];
         var createMenuItem = function(id, lang, label) {
           var listItem = document.createElement('li');
           var button = listItem.appendChild(document.createElement('button'));
