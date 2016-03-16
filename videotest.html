@@ -10,6 +10,10 @@
       <figure id="videoContainer">
          <video id="video" controls preload="metadata" poster="img/sintel.jpg">
             <source src="video/sintel-1024-surround.mp4" type="video/mp4">
+
+            <track label="Русский" kind="subtitles" srclang="ru" src="captions/sexandthecity.rus.full.vtt" default>
+            <track label="English" kind="subtitles" srclang="en" src="captions/sexandthecity.en.full.vtt">
+
 <!--            <source src="video/tears-of-steel-battle-clip-medium.webm" type="video/webm">
             <source src="video/tears-of-steel-battle-clip-medium.ogg" type="video/ogg"> -->
             <!-- Flash fallback -->
@@ -37,6 +41,7 @@
             <li><button id="volinc" type="button">Vol+</button></li>
             <li><button id="voldec" type="button">Vol-</button></li>
             <li><button id="fs" type="button">Fullscreen</button></li>
+            <li><button id="subtitles" type="button" data-state="subtitles">CC</button></li>
          </ul>
 
       </figure>

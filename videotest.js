@@ -1,4 +1,7 @@
+/*  Многое взято с сайта Mozilla Foundation, из примера создания видео плейера HTML5. Всё что взто оттуда
+    я оставил без изменений. Ниже ссылка на статью. */
 /* https://developer.mozilla.org/en-US/Apps/Fundamentals/Audio_and_video_delivery/cross_browser_video_player */
+
 'use strict';
 
   //Using the Media API
@@ -115,7 +118,7 @@ if (supportsVideo) {
     which occurs when the video's metadata has been loaded: */
 
     video.addEventListener('loadedmetadata', function() {
-       progress.setAttribute('max', video.duration);
+      progress.setAttribute('max', video.duration);
     });
 
 /*  Unfortunately in some mobile browsers, when loadedmetadata is raised — if it even is raised — video.duration may
@@ -126,8 +129,8 @@ if (supportsVideo) {
     how far through the video the current playback is. */
 
     video.addEventListener('timeupdate', function() {
-       progress.value = video.currentTime;
-       progressBar.style.width = Math.floor((video.currentTime / video.duration) * 100) + '%';
+      progress.value = video.currentTime;
+      progressBar.style.width = Math.floor((video.currentTime / video.duration) * 100) + '%';
     });
 
 /*  As the timeupdate event is raised, the progress element's value attribute is set to the video's currentTime.
@@ -141,9 +144,9 @@ if (supportsVideo) {
     the progress element's max attribute if it is currently not set: */
 
     video.addEventListener('timeupdate', function() {
-       if (!progress.getAttribute('max')) progress.setAttribute('max', video.duration);
-       progress.value = video.currentTime;
-       progressBar.style.width = Math.floor((video.currentTime / video.duration) * 100) + '%';
+      if (!progress.getAttribute('max')) progress.setAttribute('max', video.duration);
+      progress.value = video.currentTime;
+      progressBar.style.width = Math.floor((video.currentTime / video.duration) * 100) + '%';
     });
 
 /*  Note: for more information and ideas on progress bars and buffering feedback, read "Media buffering, seeking, and
@@ -155,8 +158,8 @@ if (supportsVideo) {
     to the progress element: */
 
     progress.addEventListener('click', function(e) {
-       var pos = (e.pageX  - this.offsetLeft) / this.offsetWidth;
-       video.currentTime = pos * video.duration;
+      var pos = (e.pageX  - this.offsetLeft) / this.offsetWidth;
+      video.currentTime = pos * video.duration;
     });
 
 /*  This piece of code simply uses the clicked position to (roughly) work out where in the progress element the user
@@ -260,4 +263,119 @@ var fullScreenEnabled = !!(document.fullscreenEnabled || document.mozFullScreenE
       setFullscreenData(!!document.msFullscreenElement);
     });
 
+/* https://developer.mozilla.org/en-US/Apps/Fundamentals/Audio_and_video_delivery/Adding_captions_and_subtitles_to_HTML5_video */
+    //Subtitle implementation
+/*  A lot of what we do to access the video subtitles revolves around JavaScript. Similar to the video
+    controls, if a browser supports HTML5 video subtitles, there will be a button provided within the native
+    control set to access them. However, since we have defined our own video controls, this button is hidden,
+    and we need to define our own. */
+
+/*  Browsers do vary as to what they support, so we will be attempting to bring a more unified UI to each
+    browser where possible. There's more on browser compatibility issues later on. */
+
+    //Initial setup
+/*  As with all the other buttons, one of the first things we need to do is store a handle to the subtitles'
+    button: */
+
+    var subtitles = document.getElementById('subtitles');
+
+/*  We also initially turn off all subtitles, in case the browser turns any of them on by default: */
+
+    for (var i = 0; i < video.textTracks.length; i++) {
+      video.textTracks[i].mode = 'hidden';
+      console.log(i);
+    }
+
+/*  The video.textTracks property contains an array of all the text tracks attached to the video. We loop
+    through each one and set its mode to hidden. */
+
+/*  Note: The WebVTT API [https://w3c.github.io/webvtt/#api] gives us access to all the text tracks that are
+    defined for an HTML5 video using the <track> element. */
+
+    //Building a caption menu
+
+/*  Our aim is to use the subtitles button we added earlier to display a menu that allows users to choose
+    which language they want the subtitles displayed in, or to turn them off entirely.
+
+    We have added the button, but before we make it do anything, we need to build the menu that goes with it.
+    This menu is built dynamically, so that languages can be added or removed later by simply editing the
+    <track> elements within the video's markup. */
+
+
+    /* ----------------------------- */
+    /*  The creation of each list item and button is done by the createMenuItem() function, which is defined as
+        follows: */
+
+        var captionMenuButtons = [];
+        var createMenuItem = function(id, lang, label) {
+          var listItem = document.createElement('li');
+          var button = listItem.appendChild(document.createElement('button'));
+          button.setAttribute('id', id);
+          button.className = 'subtitles-button';
+          if (lang.length > 0) button.setAttribute('lang', lang);
+          button.value = label;
+          button.setAttribute('data-state', 'inactive');
+          button.appendChild(document.createTextNode(label));
+
+          button.addEventListener('click', function(e) {
+            // Set all buttons to inactive
+            subtitleMenuButtons.map(function(v, i, a) {
+              subtitleMenuButtons[i].setAttribute('data-state', 'inactive');
+            });
+
+            // Find the language to activate
+            var lang = this.getAttribute('lang');
+            for (var i = 0; i < video.textTracks.length; i++) {
+              // For the 'subtitles-off' button, the first condition will never match so all will subtitles be turned off
+              if (video.textTracks[i].language == lang) {
+                video.textTracks[i].mode = 'showing';
+                this.setAttribute('data-state', 'active');
+              } else {
+                video.textTracks[i].mode = 'hidden';
+              }
+            }
+            subtitlesMenu.style.display = 'none';
+          });
+
+          subtitleMenuButtons.push(button);
+          return listItem;
+        }
+
+    /*  This function builds the required <li> and <button> elements, and returns them so they can be added to the
+        subtitles menu list. It also sets up the required event listeners on the button to toggle the relevant subtitle
+        set on or off. This is done by simply setting the required subtlte's mode attribute to showing, and setting the
+        others to hidden. */
+    /* ----------------------------- */
+
+
+
+/*  All we need to do is to go through the video's textTracks, reading their properties and building the menu
+    up from there: */
+
+    var subtitlesMenu;
+    if (video.textTracks) {
+      var df = document.createDocumentFragment();
+      var subtitlesMenu = df.appendChild(document.createElement('ul'));
+      subtitlesMenu.className = 'subtitles-menu';
+      subtitlesMenu.appendChild(createMenuItem('subtitles-off', '', 'Off'));
+      for (var i = 0; i < video.textTracks.length; i++) {
+        subtitlesMenu.appendChild(createMenuItem('subtitles-' + video.textTracks[i].language, video.textTracks[i].language, video.textTracks[i].label));
+      }
+      videoContainer.appendChild(subtitlesMenu);
+    }
+
+/*  This code creates a documentFragment, which is used to hold an unordered list containing our subtitles menu.
+    First of all an option is added to allow the user to switch all subtitles off, and then buttons are added
+    for each text track, reading the language and label from each one. */
+
+/*  Once the menu is built, it is then inserted into the DOM at the bottom of the videoContainer.
+
+    Initially the menu is hidden by default, so an event listener needs to be added to our subtitles button to
+    toggle it: */
+
+    subtitles.addEventListener('click', function(e) {
+      if (subtitlesMenu) {
+        subtitlesMenu.style.display = (subtitlesMenu.style.display == 'block' ? 'none' : 'block');
+      }
+    });
 }

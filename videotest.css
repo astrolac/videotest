@@ -67,7 +67,7 @@ video {
 }
 .controls li {
 	float:left;
-	width:10%;
+	width:8%;
 	margin-left:0.3%;
 }
 .controls li:first-child {
@@ -87,9 +87,20 @@ video {
     font-family: Helvetica, Verdana;
     font-weight: bold;
     font-size: 8pt;
-
 }
 
+.controls button[data-state="subtitles"] {
+    text-indent:0;
+    font-size:8pt;
+    font-weight:bold;
+    color:#666;
+    background:#000;
+    border-radius:2px;
+
+    font-family: Helvetica, Verdana;
+    font-weight: bold;
+    font-size: 8pt;
+}
 
 .controls progress {
 	display:block;
@@ -110,6 +121,43 @@ video {
 	display:inline-block;
 	background-color:#2a84cd;
 }
+
+/* -------------------------------------------------------------------- */
+/*  Subtitle menu CSS
+    We also added some rudimentary styling for the newly created subtitles menu: */
+
+.subtitles-menu {
+    display:none;
+    position:absolute;
+    bottom:14.8%;
+    right:20px;
+    background:#666;
+    list-style-type:none;
+    margin:0;
+    padding:0;
+    width:100px;
+    padding:10px;
+}
+
+.subtitles-menu li {
+    padding:0;
+    text-align:center;
+}
+
+.subtitles-menu li button {
+    border:none;
+    background:#000;
+    color:#fff;
+    cursor:pointer;
+    width:90%;
+    padding:2px 5px;
+    border-radius:2px;
+}
+
+::cue {
+   color:#ccc;
+}
+/* -------------------------------------------------------------------- */
 
 /* fullscreen */
 html:-ms-fullscreen {
