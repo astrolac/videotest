@@ -7,13 +7,8 @@
   <body bottommargin="0" leftmargin="0" rigthmargin="0" topmargin="0">
     <div class="mainblock">
       <?php
-        echo "<table>";
-	foreach($_SERVER as $key=>$value) {
-          echo "<tr>";
-          echo "<td align=\"right\">".$key."</td><td align=\"left\">".$value."</td>";
-          echo "</tr>";
-        }
-        echo "</table>";
+        SQLiteDatabase sqlite_factory("db/videotest.db");
+        
       ?>
     </div>
   </body>

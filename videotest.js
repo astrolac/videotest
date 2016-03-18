@@ -31,7 +31,7 @@ if (supportsVideo) {
 /*  As mentioned earlier, the browser's default controls now need to be disabled, and the custom controls need to be
     displayed: */
 
-  video.controls = false; /* Hide the default controls */
+  /*video.controls = false; /* Hide the default controls */
   videoControls.style.display = 'block'; /* Display the user defined video controls */
 
 /* With that done, a variable pointing to each of the buttons is now required: */
