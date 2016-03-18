@@ -7,7 +7,13 @@
   <body bottommargin="0" leftmargin="0" rigthmargin="0" topmargin="0">
     <div class="mainblock">
       <?php
-        echo $_SERVER['HTTP_USER_AGENT'];
+        echo "<table>";
+	foreach($_SERVER as $key=>$value) {
+          echo "<tr>";
+          echo "<td align=\"right\">".$key."</td><td align=\"left\">".$value."</td>";
+          echo "</tr>";
+        }
+        echo "</table>";
       ?>
     </div>
   </body>
