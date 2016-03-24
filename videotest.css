@@ -2,22 +2,48 @@
   color: white;
   font-family: Helvetica, Verdana;
   font-weight: bold;
-  font-size: 1em;
+  font-size: 14pt;
   background: black;
   width: 100%;
-  padding: 0px 0px;
-  text-align: center;
+  padding: 5px 5px;
+  text-align: left;
+}
+
+.mediablock {
+  color: white;
+  font-family: Lucida, Helvetica, Verdana;
+  font-weight: bold;
+  font-size: 10pt;
+  text-align: left;
+  background: black;
+  padding: 5px 5px;
+  margin: 10px auto;
+  border-color: white;
+  border-width: 1px;
+  border-style: dashed;
+  width: 80%;
 }
 
 .mainblock table {
+  width: 70%;
+  padding: 0px 0px;
+  border-color: white;
+  border-width: 1px;
+  border-style: dashed;
+  margin: auto;
+}
+
+.mainblock td {
   color: white;
   font-family: Helvetica, Verdana;
   font-weight: bold;
-  font-size: 1em;
+  font-size: 10pt;
+  text-align: left;
   background: black;
-  width: 70%;
-  padding: 0px 0px;
-  text-align: center;  
+  padding: 5px 5px;
+  border-color: white;
+  border-width: 1px;
+  border-style: solid;
 }
 
 html,body {
